@@ -6,6 +6,9 @@ from config import BATCH_SIZE, DATA_DIR
 
 
 class Data:
+    train: DataLoader
+    test: DataLoader
+
     def __init__(self):
         self.path = DATA_DIR
 

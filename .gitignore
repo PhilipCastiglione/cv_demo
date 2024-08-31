@@ -3,6 +3,9 @@
 # Ignore downloaded data
 data/
 
+# Ignore saved checkpoints - this is just a demo project and creating
+# the checkpoints is part of the point
+checkpoints/
 
 # Boilerplate for Python projects
 # Source: https://github.com/github/gitignore/blob/main/Python.gitignore
