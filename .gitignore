@@ -1,3 +1,12 @@
+# Project specific
+
+# Ignore downloaded data
+data/
+
+
+# Boilerplate for Python projects
+# Source: https://github.com/github/gitignore/blob/main/Python.gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
