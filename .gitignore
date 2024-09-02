@@ -7,6 +7,9 @@ data/
 # the checkpoints is part of the point
 checkpoints/
 
+# Ignore run outputs
+runs/
+
 # Boilerplate for Python projects
 # Source: https://github.com/github/gitignore/blob/main/Python.gitignore
 

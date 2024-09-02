@@ -1,6 +1,8 @@
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+from torchvision.utils import make_grid
 
 from config import BATCH_SIZE, DATA_DIR
 
@@ -11,17 +13,29 @@ class Data:
 
     def __init__(self):
         self.path = DATA_DIR
+        self.classes = (
+            "T-shirt/top",
+            "Trouser",
+            "Pullover",
+            "Dress",
+            "Coat",
+            "Sandal",
+            "Shirt",
+            "Sneaker",
+            "Bag",
+            "Ankle Boot",
+        )
 
     def get_data(self):
         training_data = datasets.FashionMNIST(
-            root="data",
+            root=self.path,
             train=True,
             download=True,
             transform=ToTensor(),
         )
 
         test_data = datasets.FashionMNIST(
-            root="data",
+            root=self.path,
             train=False,
             download=True,
             transform=ToTensor(),
@@ -32,12 +46,20 @@ class Data:
         self.test = DataLoader(test_data, batch_size=BATCH_SIZE)
 
     def inspect_data(self):
-        for X, y in self.test:
-            print(f"Shape of X [N, C, H, W]: {X.shape}")
-            print(f"Shape of y: {y.shape} {y.dtype}")
-            break
+        print(self.train.dataset, end="\n\n")
+        print(self.test.dataset, end="\n\n")
 
-        for X, y in self.train:
-            print(f"Shape of X [N, C, H, W]: {X.shape}")
-            print(f"Shape of y: {y.shape} {y.dtype}")
-            break
+        train_features, train_labels = next(iter(self.train))
+
+        print(f"Feature batch shape: {train_features.size()}", end="\n\n")
+        print(f"Labels batch shape: {train_labels.size()}", end="\n\n")
+
+        print(f"Classes: {self.classes}", end="\n\n")
+
+        print("First batch examples in image below.")
+
+        img_grid = make_grid(train_features)
+        img_grid = img_grid.mean(dim=0)
+
+        npimg = img_grid.numpy()
+        plt.imshow(npimg, cmap="Greys")

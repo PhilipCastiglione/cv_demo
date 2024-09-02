@@ -2,7 +2,7 @@ import os
 
 import torch
 
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 CHECKPOINTS_DIR = os.path.join(os.path.dirname(__file__), "checkpoints")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 DEVICE = (
