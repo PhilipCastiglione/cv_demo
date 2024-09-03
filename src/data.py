@@ -1,18 +1,21 @@
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import writer
 from torchvision import datasets
-from torchvision.transforms import ToTensor
+from torchvision.transforms import v2
 from torchvision.utils import make_grid
 
-from config import BATCH_SIZE, DATA_DIR
+from src.config import DATA_DIR
 
 
 class Data:
     train: DataLoader
     test: DataLoader
 
-    def __init__(self):
+    def __init__(self, batch_size: int, summary_writer: writer.SummaryWriter):
         self.path = DATA_DIR
+        self.batch_size = batch_size
+        self.summary_writer = summary_writer
         self.classes = (
             "T-shirt/top",
             "Trouser",
@@ -31,19 +34,26 @@ class Data:
             root=self.path,
             train=True,
             download=True,
-            transform=ToTensor(),
+            transform=v2.Compose(
+                [
+                    v2.ToTensor(),
+                    # v2.Normalize((0.5,), (0.5,)),
+                    # v2.RandomHorizontalFlip(),
+                    # v2.RandomRotation((-30, 30)),
+                ]
+            ),
         )
 
         test_data = datasets.FashionMNIST(
             root=self.path,
             train=False,
             download=True,
-            transform=ToTensor(),
+            transform=v2.ToTensor(),
         )
 
-        self.train = DataLoader(training_data, batch_size=BATCH_SIZE, shuffle=True)
+        self.train = DataLoader(training_data, batch_size=self.batch_size, shuffle=True)
 
-        self.test = DataLoader(test_data, batch_size=BATCH_SIZE)
+        self.test = DataLoader(test_data, batch_size=self.batch_size)
 
     def inspect_data(self):
         print(self.train.dataset, end="\n\n")
@@ -58,8 +68,10 @@ class Data:
 
         print("First batch examples in image below.")
 
-        img_grid = make_grid(train_features)
-        img_grid = img_grid.mean(dim=0)
+        features_image_grid = make_grid(train_features)
+        plot_images = features_image_grid.mean(dim=0).numpy()
 
-        npimg = img_grid.numpy()
-        plt.imshow(npimg, cmap="Greys")
+        plt.imshow(plot_images, cmap="Greys")
+
+        self.summary_writer.add_image("First batch examples", features_image_grid)
+        self.summary_writer.flush()

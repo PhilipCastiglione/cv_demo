@@ -3,10 +3,10 @@ import os
 import torch
 from torch import nn
 
-from config import CHECKPOINTS_DIR, DEVICE
+from src.config import CHECKPOINTS_DIR, DEVICE
 
 
-class NeuralNetwork(nn.Module):
+class Model(nn.Module):
     def __init__(self):
         super().__init__()
         self.flatten = nn.Flatten()
@@ -18,6 +18,11 @@ class NeuralNetwork(nn.Module):
             nn.Linear(512, 10),
         )
 
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
     @classmethod
     def load_checkpoints(cls):
         model = cls().to(DEVICE)
@@ -25,11 +30,6 @@ class NeuralNetwork(nn.Module):
             torch.load(os.path.join(CHECKPOINTS_DIR, "model.pth"), weights_only=True)
         )
         return model
-
-    def forward(self, x):
-        x = self.flatten(x)
-        logits = self.linear_relu_stack(x)
-        return logits
 
     def save_checkpoints(self):
         torch.save(self.state_dict(), os.path.join(CHECKPOINTS_DIR, "model.pth"))
