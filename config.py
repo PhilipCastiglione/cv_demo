@@ -13,3 +13,4 @@ DEVICE = (
     else "cpu"
 )
 print(f"Using {DEVICE} device")
+LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
