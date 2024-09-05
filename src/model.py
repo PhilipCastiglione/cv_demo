@@ -7,21 +7,34 @@ from src.config import CHECKPOINTS_DIR, DEVICE
 
 
 class Model(nn.Module):
+    """
+    A simple CNN model for the FashionMNIST dataset.
+
+    Uses 2 convolutional layers followed by max pooling and 2 fully connected layers.
+    """
+
     def __init__(self):
         super().__init__()
-        self.flatten = nn.Flatten()
-        self.linear_relu_stack = nn.Sequential(
-            nn.Linear(28 * 28, 512),
-            nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10),
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(64 * 7 * 7, 128),
+            nn.ReLU(inplace=True),
+            nn.Linear(128, 10),
         )
 
     def forward(self, x):
-        x = self.flatten(x)
-        logits = self.linear_relu_stack(x)
-        return logits
+        x = self.features(x)
+        x = x.view(x.size(0), 64 * 7 * 7)
+        x = self.classifier(x)
+        return x
 
     @classmethod
     def load_checkpoints(cls):
