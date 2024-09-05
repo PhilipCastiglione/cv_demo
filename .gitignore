@@ -10,6 +10,9 @@ checkpoints/
 # Ignore run outputs
 runs/
 
+# Ignore ruff formatting cache
+.ruff_cache
+
 # Boilerplate for Python projects
 # Source: https://github.com/github/gitignore/blob/main/Python.gitignore
 
