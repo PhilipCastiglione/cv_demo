@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import torch
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import writer
 from torchvision import datasets
@@ -36,10 +37,10 @@ class Data:
             download=True,
             transform=v2.Compose(
                 [
-                    v2.ToTensor(),
-                    # v2.Normalize((0.5,), (0.5,)),
-                    # v2.RandomHorizontalFlip(),
-                    # v2.RandomRotation((-30, 30)),
+                    v2.ToImage(),
+                    v2.ToDtype(torch.float32, scale=True),
+                    v2.RandomHorizontalFlip(),
+                    v2.RandomRotation((-5, 5)),
                 ]
             ),
         )
@@ -48,7 +49,7 @@ class Data:
             root=self.path,
             train=False,
             download=True,
-            transform=v2.ToTensor(),
+            transform=v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)]),
         )
 
         self.train = DataLoader(training_data, batch_size=self.batch_size, shuffle=True)
