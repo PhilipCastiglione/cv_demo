@@ -16,13 +16,16 @@ Additional project code can be found in [the src folder](./src).
 If you are using `uv` (a modern python package and project management tool written in rust):
 
 ```sh
-TODO
+uv python install
+uv python sync
 ```
 
-If you are using `pip`
+If you are using `pip`, with an appropriate version of python installed and referenced by `python`:
 
 ```sh
-TODO
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install .
 ```
 
 conda? anything else?
@@ -49,6 +52,5 @@ With the current set of hyperparameter values, accuracy of approximately 93.0% i
 
 ## TODO
 
-* flesh out the readme
-  * get some theory
-  * document and explain why the model is good
+* try and improve the model further
+* flesh out detail about the model in the README
