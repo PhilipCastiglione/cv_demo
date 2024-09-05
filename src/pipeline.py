@@ -24,6 +24,7 @@ class Pipeline:
         self.model = model
         self.loss_fn = loss_fn
         self.optimizer = optimizer
+        self.reporting_batches = reporting_batches
         self.summary_writer = summary_writer
 
     def process(self, epochs: int):
@@ -67,8 +68,8 @@ class Pipeline:
 
             cumulative_loss += loss.item()
 
-            if (batch + 1) % 100 == 0:
-                last_loss = cumulative_loss / 100
+            if (batch + 1) % self.reporting_batches == 0:
+                last_loss = cumulative_loss / self.reporting_batches
                 total_batches = epoch * len(self.data.train) + batch + 1
                 print(f"Training batch {total_batches} loss: {last_loss:.4f}")
                 self.summary_writer.add_scalar(
