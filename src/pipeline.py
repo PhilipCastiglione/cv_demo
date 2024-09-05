@@ -1,13 +1,13 @@
 from typing import Sized, cast
 
 import torch
+from torch import nn
+from torch.optim.adam import Adam
 from torch.utils.tensorboard import writer
 
 from src.config import DEVICE
 from src.data import Data
-from src.loss_function import LossFunction
 from src.model import Model
-from src.optimizer import Optimizer
 
 
 class Pipeline:
@@ -15,8 +15,9 @@ class Pipeline:
         self,
         data: Data,
         model: Model,
-        loss_fn: LossFunction,
-        optimizer: Optimizer,
+        loss_fn: nn.CrossEntropyLoss,
+        optimizer: Adam,
+        reporting_batches: int,
         summary_writer: writer.SummaryWriter,
     ):
         self.data = data
