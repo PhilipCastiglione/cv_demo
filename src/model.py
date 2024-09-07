@@ -28,6 +28,7 @@ class Model(nn.Module):
             nn.Linear(64 * 7 * 7, 128),
             nn.ReLU(inplace=True),
             nn.Linear(128, 10),
+            nn.LogSoftmax(dim=1),
         )
 
     def forward(self, x):
